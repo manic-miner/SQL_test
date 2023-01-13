@@ -19,3 +19,5 @@ FROM
     cte_sales_amounts
 WHERE
     year = 2018;
+
+SELECT * FROM sales.orders
