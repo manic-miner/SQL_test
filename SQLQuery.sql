@@ -19,7 +19,9 @@ SELECT
 FROM 
     cte_sales_amounts
 WHERE
-    year = 2018;
+    year = 2018
+ORDER BY
+    sales DESC;
 
 SELECT * FROM sales.orders
 
@@ -27,7 +29,8 @@ SELECT * FROM sales.orders
 -- This subquery counts number of orders/sales by staff member 
 -- it's included in the results, staff that have done no sales (NULL) is filtered out
 -- and it's sorted by number of sales in descending order
--- The query is quite long because subquery is copied three times - is there a better solution?
+-- The query is quite long because subquery is copied three times
+-- I should try to use CTE here as well
 
 SELECT 
 first_name + ' ' + last_name AS 'Name',
@@ -67,3 +70,4 @@ ORDER BY
 ) DESC
 
 --
+
