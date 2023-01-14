@@ -21,43 +21,31 @@ ORDER BY sales DESC;
 
 
 -- This subquery shows number of sales by staff member, without NULL results and in descending order
--- It works but is way too long because subquery is copied three times
+-- It works but is too long and too complicated because subquery is copied three times
 
 SELECT 
 first_name + ' ' + last_name AS 'Name',
 (
-    SELECT 
-	COUNT(order_id) order_count
-    FROM 
-	sales.orders o
-    WHERE
-    o.staff_id = s.staff_id
-    GROUP BY 
-	staff_id
+    SELECT COUNT(order_id) order_count
+    FROM sales.orders o
+    WHERE o.staff_id = s.staff_id
+    GROUP BY staff_id
 ) AS 'Total sales'
 FROM
 sales.staffs s
 WHERE
 (
-    SELECT 
-	COUNT(order_id) order_count
-    FROM 
-	sales.orders o
-    WHERE
-    o.staff_id = s.staff_id
-    GROUP BY 
-	staff_id
+    SELECT COUNT(order_id) order_count
+    FROM sales.orders o
+    WHERE o.staff_id = s.staff_id
+    GROUP BY staff_id
 ) >= 0
 ORDER BY
 (
-    SELECT 
-	COUNT(order_id) order_count
-    FROM 
-	sales.orders o
-    WHERE
-    o.staff_id = s.staff_id
-    GROUP BY 
-	staff_id
+    SELECT COUNT(order_id) order_count
+    FROM sales.orders o
+    WHERE o.staff_id = s.staff_id
+    GROUP BY staff_id
 ) DESC
 
 -- same query but with CTE
@@ -65,17 +53,12 @@ WITH cte_total_sales (staff, sales) AS (
 SELECT 
 first_name + ' ' + last_name AS 'Name',
 (
-    SELECT 
-	COUNT(order_id) order_count
-    FROM 
-	sales.orders o
-    WHERE
-    o.staff_id = s.staff_id
-    GROUP BY 
-	staff_id
-) AS 'Total sales'
-FROM
-sales.staffs s
+    SELECT COUNT(order_id) order_count
+    FROM sales.orders o
+    WHERE o.staff_id = s.staff_id
+    GROUP BY staff_id
+)
+FROM sales.staffs s
 )
 SELECT staff, sales
 FROM cte_total_sales
