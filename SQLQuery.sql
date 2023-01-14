@@ -53,7 +53,7 @@ WITH cte_total_sales (staff, sales) AS (
 SELECT 
 first_name + ' ' + last_name AS 'Name',
 (
-    SELECT COUNT(order_id) order_count
+    SELECT COUNT(o.order_id) order_count
     FROM sales.orders o
     WHERE o.staff_id = s.staff_id
     GROUP BY staff_id
@@ -65,3 +65,28 @@ FROM cte_total_sales
 WHERE sales >= 0
 ORDER BY sales DESC;
 -- much better
+
+-- recursive CTE example
+WITH cte_numbers(n, weekday) 
+AS (
+    SELECT 
+        0, 
+        DATENAME(DW, 0)
+    UNION ALL
+    SELECT    
+        n + 1, 
+        DATENAME(DW, n + 1)
+    FROM cte_numbers
+    WHERE n < 6
+)
+SELECT weekday
+FROM cte_numbers;
+
+--
+SELECT count(order_id)
+FROM sales.orders
+
+SELECT SUM(list_price)
+FROM sales.order_items
+WHERE order_id = 1
+
