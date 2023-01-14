@@ -25,12 +25,8 @@ ORDER BY
 
 SELECT * FROM sales.orders
 
---
--- This subquery counts number of orders/sales by staff member 
--- it's included in the results, staff that have done no sales (NULL) is filtered out
--- and it's sorted by number of sales in descending order
--- The query is quite long because subquery is copied three times
--- I should try to use CTE here as well
+-- This subquery shows number of sales by staff member, without NULL resulys and in descending order
+-- It works but is way too long because subquery is copied three times
 
 SELECT 
 first_name + ' ' + last_name AS 'Name',
@@ -69,5 +65,26 @@ ORDER BY
 	staff_id
 ) DESC
 
---
+-- same query but with CTE
+WITH cte_total_sales (staff, sales) AS (
+SELECT 
+first_name + ' ' + last_name AS 'Name',
+(
+    SELECT 
+	COUNT(order_id) order_count
+    FROM 
+	sales.orders o
+    WHERE
+    o.staff_id = s.staff_id
+    GROUP BY 
+	staff_id
+) AS 'Total sales'
+FROM
+sales.staffs s
+)
+SELECT staff, sales
+FROM cte_total_sales
+WHERE sales >= 0
+ORDER BY sales DESC;
 
+-- much better
