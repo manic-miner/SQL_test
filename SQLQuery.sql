@@ -150,3 +150,17 @@ FROM
     sales.orders
 WHERE 
     YEAR(order_date) = 2018;
+
+
+-- building up a query that shows total $ value per order
+WITH cte_order_value (value) AS (SELECT
+p.list_price * i.quantity * (1 - i.discount) AS [value]
+FROM sales.order_items i
+INNER JOIN sales.orders o ON o.order_id = i.order_id
+INNER JOIN production.products p ON p.product_id = i.product_id
+--WHERE o.order_id = 1
+)
+SELECT
+sum(value)
+FROM
+cte_order_value

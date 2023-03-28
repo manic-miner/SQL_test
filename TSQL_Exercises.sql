@@ -48,3 +48,32 @@ HAVING AVG(freight) > 0
 ORDER by avgfreight DESC;
 
 -- Exercise 8
+SELECT  custid,
+        orderdate, 
+        orderid,
+        ROW_NUMBER() OVER(PARTITION BY custid ORDER BY orderdate, orderid) as rownum
+FROM Sales.Orders
+ORDER BY custid;
+
+-- Exercise 9
+SELECT  empid, 
+        firstname, 
+        lastname, 
+        titleofcourtesy, 
+        CASE titleofcourtesy
+            WHEN 'Mr.' THEN 'Male'
+            WHEN 'Ms.' THEN 'Female'
+            WHEN 'Mrs.' THEN 'Female'
+            ELSE 'Unknown'
+        END AS gender
+FROM HR.Employees;
+
+-- Exercise 10
+SELECT custid, region
+FROM Sales.Customers
+ORDER BY 
+    CASE 
+        WHEN region IS NULL THEN 1
+        ELSE 0
+    END,
+    region;
