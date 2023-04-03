@@ -32,4 +32,30 @@ FROM Sales.Customers
 WHERE country NOT IN (
     SELECT country
     FROM HR.Employees
+);
+
+-- Exercise 5
+SELECT custid, orderid, orderdate, empid
+FROM Sales.Orders o1
+WHERE orderdate IN (
+    SELECT MAX(orderdate) FROM Sales.Orders o2
+    WHERE o1.custid = o2.custid
+);
+
+-- Exercise 6
+SELECT custid, companyname
+FROM Sales.Customers AS c
+WHERE EXISTS (
+    SELECT *
+    FROM Sales.Orders AS o
+    WHERE orderdate LIKE '%2015%'
+    AND o.custid = c.custid
 )
+AND NOT EXISTS (
+    SELECT *
+    FROM Sales.Orders AS o
+    WHERE orderdate LIKE '%2016%'
+    AND o.custid = c.custid
+);
+
+--
