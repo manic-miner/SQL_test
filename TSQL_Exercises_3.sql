@@ -58,4 +58,17 @@ AND NOT EXISTS (
     AND o.custid = c.custid
 );
 
---
+-- Exercise 7
+SELECT custid, companyname
+FROM Sales.Customers AS c
+WHERE EXISTS (
+    SELECT *
+    FROM Sales.Orders AS o
+    WHERE o.custid = c.custid
+    AND EXISTS (
+        SELECT *
+        FROM Sales.OrderDetails AS d
+        WHERE d.orderid = o.orderid
+        AND d.productid = 12
+    )
+);
